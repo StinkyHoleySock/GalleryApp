@@ -4,4 +4,5 @@
     <string name="preview_image">Preview image</string>
     <string name="example_number_photos">123</string>
     <string name="example_name">Example name</string>
+    <string name="permission_denied">Permission denied!</string>
 </resources>
