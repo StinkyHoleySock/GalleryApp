@@ -5,18 +5,18 @@ import android.os.Parcelable
 
 data class Albums(
     val folderName: String?,
-    val numberOfImages: Int,
+    val numberOfImages: String?,
     val isVideo: Boolean
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readInt(),
+        parcel.readString(),
         parcel.readByte() != 0.toByte()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(folderName)
-        parcel.writeInt(numberOfImages)
+        parcel.writeString(numberOfImages)
         parcel.writeByte(if (isVideo) 1 else 0)
     }
 
