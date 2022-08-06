@@ -1,15 +1,14 @@
 package com.dmitry.galleryapp.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dmitry.galleryapp.R
+import com.bumptech.glide.Glide
+import com.dmitry.galleryapp.Gallery
 import com.dmitry.galleryapp.databinding.AlbumItemBinding
-import com.dmitry.galleryapp.model.Albums
 
 class AlbumAdapter(
-    private val listArray: ArrayList<Albums>,
+    private val listArray: List<Gallery.Album>,
 ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
 
 
@@ -23,9 +22,14 @@ class AlbumAdapter(
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
         val album = listArray[position]
         with(holder.binding) {
-            ivLastImage.setImageResource(R.drawable.ic_launcher_background)
-            tvAlbumName.text = album.folderName
-            tvNumberPhotos.text = album.numberOfImages
+
+            Glide.with(ivLastImage)
+                .asBitmap()
+                .load(album.uri)
+                .into(ivLastImage)
+
+            tvAlbumName.text = album.name
+            tvNumberPhotos.text = album.count.toString()
         }
     }
 
