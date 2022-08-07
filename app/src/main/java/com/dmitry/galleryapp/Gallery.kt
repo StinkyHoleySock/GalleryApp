@@ -2,13 +2,12 @@ package com.dmitry.galleryapp
 
 import android.content.ContentUris
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import com.dmitry.galleryapp.model.Album
 import com.dmitry.galleryapp.model.Image
 
-class Gallery(val context: Context) {
+class Gallery(private val context: Context) {
     private val contentResolver by lazy {
         context.contentResolver
     }
@@ -16,8 +15,7 @@ class Gallery(val context: Context) {
 
     fun findAlbums(): List<Album> {
 
-        val collection =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 MediaStore.Images.Media.getContentUri(
                     MediaStore.VOLUME_EXTERNAL
                 )
@@ -26,12 +24,10 @@ class Gallery(val context: Context) {
             }
 
         val projections = arrayOf(
-
             MediaStore.Images.ImageColumns._ID,
-            MediaStore.Images.ImageColumns.DATE_TAKEN,
             MediaStore.Images.ImageColumns.BUCKET_ID,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
             MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-
         )
 
         val orderBy = "${MediaStore.Images.ImageColumns.DATE_TAKEN} DESC"
@@ -60,7 +56,7 @@ class Gallery(val context: Context) {
                         id = bucketId,
                         name = bucketName,
                         uri = uri,
-                        count = 1,
+                        count = 0,
                     )
                         findAlbums[bucketId] = album
 
@@ -73,7 +69,7 @@ class Gallery(val context: Context) {
             }
         }
 
-        return findAlbums.values.toList().sortedByDescending { it.count }
+        return findAlbums.values.toList().sortedBy { it.name }
     }
 
     fun findImagesInAlbum(albumId: String): List<Image> {
@@ -101,14 +97,16 @@ class Gallery(val context: Context) {
                 do {
                     val mediaId = cursor.getLong(idIndex)
                     val filename = cursor.getString(displayNameIndex)
-
-                    val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId)
+                    val uri = ContentUris.withAppendedId(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        mediaId
+                    )
 
                     val image = Image(
                         id = mediaId.toString(),
                         name = filename,
                         uri = uri,
-                        count = 1,
+                        count = 0,
                     )
                     findImages[mediaId.toString()] = image
 

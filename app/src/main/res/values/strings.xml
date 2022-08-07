@@ -7,4 +7,7 @@
     <string name="permission_denied">Permission denied!</string>
     <string name="example_name_of_image">Example_name_of_image.jpeg</string>
     <string name="rename">Rename</string>
+    <string name="rename_image">Rename image</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -18,5 +18,30 @@
     <fragment
         android:id="@+id/albumFragment"
         android:name="com.dmitry.galleryapp.ui.album.AlbumFragment"
-        android:label="AlbumFragment" />
+        android:label="AlbumFragment" >
+        <action
+            android:id="@+id/action_albumFragment_to_imageFragment"
+            app:destination="@id/imageFragment" />
+        <argument
+            android:name="imageUri"
+            app:argType="android.net.Uri" />
+        <argument
+            android:name="imageName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.dmitry.galleryapp.ui.image.ImageFragment"
+        android:label="ImageFragment" >
+        <action
+            android:id="@+id/action_imageFragment_to_renameFragment"
+            app:destination="@id/renameFragment" />
+        <argument
+            android:name="imageName"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/renameFragment"
+        android:name="com.dmitry.galleryapp.ui.rename.RenameFragment"
+        android:label="RenameFragment" />
 </navigation>
