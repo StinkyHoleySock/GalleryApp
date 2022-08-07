@@ -6,9 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 
-import java.io.File
-
-
 class Gallery(val context: Context) {
     private val contentResolver by lazy {
         context.contentResolver
@@ -19,7 +16,6 @@ class Gallery(val context: Context) {
         val name: String,
         var count: Long = 0,
         var uri: Uri? = null,
-        var file: File? = null,
     )
 
     class Image(
@@ -99,15 +95,7 @@ class Gallery(val context: Context) {
             MediaStore.Images.ImageColumns._ID,
             MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
             MediaStore.Images.ImageColumns.DATE_TAKEN,
-            MediaStore.Images.ImageColumns.DISPLAY_NAME,
-            MediaStore.Images.ImageColumns.ORIENTATION,
-            MediaStore.Images.ImageColumns.WIDTH,
-            MediaStore.Images.ImageColumns.HEIGHT,
-            MediaStore.Images.ImageColumns.SIZE,
-            @Suppress("DEPRECATION")
-            MediaStore.Images.ImageColumns.LATITUDE,
-            @Suppress("DEPRECATION")
-            MediaStore.Images.ImageColumns.LONGITUDE
+            MediaStore.Images.ImageColumns.DISPLAY_NAME
         )
         val selection = "${MediaStore.Images.ImageColumns.BUCKET_ID} == ?"
         val selectionArgs = arrayOf(albumId)
@@ -117,34 +105,16 @@ class Gallery(val context: Context) {
         contentResolver.query(contentUri, projections, selection, selectionArgs,
             "${MediaStore.Images.ImageColumns.DATE_TAKEN} ASC")?.use { cursor ->
 
-            val totalCount = cursor.count
-
             if (cursor.moveToFirst()) {
 
                 val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID)
-                val dateTakenIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATE_TAKEN)
                 val displayNameIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME)
-
-                val orientationIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION)
-                val widthIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.WIDTH)
-                val heightIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.HEIGHT)
-                val sizeIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.SIZE)
-                @Suppress("DEPRECATION")
-                val latIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.LATITUDE)
-                @Suppress("DEPRECATION")
-                val lonIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.LONGITUDE)
 
                 do {
                     val mediaId = cursor.getLong(idIndex)
                     val filename = cursor.getString(displayNameIndex)
-                    val millis = cursor.getLong(dateTakenIndex)
-                    val orientation = cursor.getInt(orientationIndex)
-                    val width = cursor.getInt(widthIndex)
-                    val height = cursor.getInt(heightIndex)
-                    val size = cursor.getLong(sizeIndex)
 
-                    // scoped storage - access file via uri instead of filepath + filename
-                    var uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId)
+                    val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId)
 
                     val image = Image(
                         id = mediaId.toString(),

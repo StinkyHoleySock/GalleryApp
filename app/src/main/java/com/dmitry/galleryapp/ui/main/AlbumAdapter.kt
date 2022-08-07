@@ -1,15 +1,21 @@
 package com.dmitry.galleryapp.ui.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dmitry.galleryapp.Gallery
+import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.AlbumItemBinding
+import com.dmitry.galleryapp.ui.album.AlbumFragment
 
 class AlbumAdapter(
     private val listArray: List<Gallery.Album>,
-) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>()  {
+) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
 
 
@@ -30,6 +36,14 @@ class AlbumAdapter(
 
             tvAlbumName.text = album.name
             tvNumberPhotos.text = album.count.toString()
+
+            this.albumItem.setOnClickListener() {
+                albumItem.findNavController().navigate(
+                    R.id.action_mainFragment_to_albumFragment,
+                    bundleOf(AlbumFragment.ALBUM_KEY to album.id)
+                )
+                //Toast.makeText(holder.itemView.context, "album id: ${album.id}", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -38,4 +52,6 @@ class AlbumAdapter(
     class AlbumViewHolder(
         val binding: AlbumItemBinding
     ) : RecyclerView.ViewHolder(binding.root)
+
+
 }
