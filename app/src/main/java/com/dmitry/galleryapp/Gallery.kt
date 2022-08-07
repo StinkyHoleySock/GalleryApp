@@ -5,25 +5,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import com.dmitry.galleryapp.model.Album
+import com.dmitry.galleryapp.model.Image
 
 class Gallery(val context: Context) {
     private val contentResolver by lazy {
         context.contentResolver
     }
-
-    class Album(
-        val id: String,
-        val name: String,
-        var count: Long = 0,
-        var uri: Uri? = null,
-    )
-
-    class Image(
-        val id: String,
-        val name: String,
-        val uri: Uri? = null,
-        var count: Long = 0,
-    )
 
 
     fun findAlbums(): List<Album> {

@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.dmitry.galleryapp.Gallery
 import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentAlbumBinding
+import com.dmitry.galleryapp.model.Image
 
 private var _binding: FragmentAlbumBinding? = null
 private val binding get() = _binding!!
@@ -34,7 +34,7 @@ class AlbumFragment: Fragment(R.layout.fragment_album) {
 
         val gallery = Gallery(requireContext())
         val albumId = arguments?.getString(ALBUM_KEY)
-        val images: List<Gallery.Image> = gallery.findImagesInAlbum(albumId.toString())
+        val images: List<Image> = gallery.findImagesInAlbum(albumId.toString())
         val layoutManager = GridLayoutManager(context, 3)
         adapter = ImageAdapter(images)
 

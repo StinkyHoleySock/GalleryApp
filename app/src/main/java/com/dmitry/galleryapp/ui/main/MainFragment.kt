@@ -1,7 +1,6 @@
 package com.dmitry.galleryapp.ui.main
 
 import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dmitry.galleryapp.Gallery
 import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentMainBinding
+import com.dmitry.galleryapp.model.Album
 
 private var _binding: FragmentMainBinding? = null
 private val binding get() = _binding!!
@@ -36,7 +36,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
 
         val gallery = Gallery(requireContext())
-        val albums: List<Gallery.Album> = gallery.findAlbums()
+        val albums: List<Album> = gallery.findAlbums()
 
 
         //Получение пермишена на чтение из файловой системы

@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dmitry.galleryapp.Gallery
 import com.dmitry.galleryapp.databinding.ImageItemBinding
+import com.dmitry.galleryapp.model.Image
 
 class ImageAdapter(
-    private val listArray: List<Gallery.Image>,
+    private val listArray: List<Image>,
 ) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
 
