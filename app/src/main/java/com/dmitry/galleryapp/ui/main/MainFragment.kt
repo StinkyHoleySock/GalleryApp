@@ -38,7 +38,6 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         val gallery = Gallery(requireContext())
         val albums: List<Album> = gallery.findAlbums()
 
-
         //Получение пермишена на чтение из файловой системы
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()

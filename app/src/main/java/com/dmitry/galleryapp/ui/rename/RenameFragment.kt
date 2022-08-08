@@ -1,10 +1,15 @@
 package com.dmitry.galleryapp.ui.rename
 
+import android.Manifest
 import android.content.ClipData
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.dmitry.galleryapp.Gallery
 import com.dmitry.galleryapp.R
@@ -31,21 +36,21 @@ class RenameFragment: DialogFragment(R.layout.fragment_rename) {
         super.onViewCreated(view, savedInstanceState)
 
         val imageName = arguments?.getString(NAME_KEY)
+        val uri = arguments?.getParcelable<Uri>(URI_KEY)
+
         binding.etName.hint = imageName
 
-        val image = Image(id = "", name = imageName)
-
         binding.tvApply.setOnClickListener {
-            renameImage()
+
+            val newName = binding.etName.text.toString()
+
+            if (uri != null) {
+                Gallery(requireContext()).renameFile(uri = uri, newName = newName)
+            }
+
         }
 
     }
-
-    private fun renameImage() {
-
-    }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -54,5 +59,6 @@ class RenameFragment: DialogFragment(R.layout.fragment_rename) {
 
     companion object {
         const val NAME_KEY = "NAME"
+        const val URI_KEY = "URI"
     }
 }

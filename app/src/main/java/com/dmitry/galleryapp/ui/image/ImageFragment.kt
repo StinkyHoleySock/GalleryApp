@@ -1,10 +1,13 @@
 package com.dmitry.galleryapp.ui.image
 
+import android.Manifest
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,20 +35,27 @@ class ImageFragment: Fragment(R.layout.fragment_image) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val imageUri = arguments?.getParcelable<Uri?>(IMAGE_KEY)
         val imageName = arguments?.getString(NAME_KEY)
+        val imageUri = arguments?.getParcelable<Uri?>(IMAGE_KEY)
 
-        Glide.with(binding.ivImage)
-            .asBitmap()
-            .load(imageUri)
-            .into(binding.ivImage)
+        with(binding) {
 
-        binding.tvImageName.text = imageName
+            Glide.with(ivImage)
+                .asBitmap()
+                .load(imageUri)
+                .into(ivImage)
+
+            tvImageName.text = imageName
+        }
 
         binding.btnRename.setOnClickListener {
+
             findNavController().navigate(
                 R.id.action_imageFragment_to_renameFragment,
-                bundleOf(RenameFragment.NAME_KEY to imageName)
+                bundleOf(
+                    RenameFragment.NAME_KEY to imageName,
+                    RenameFragment.URI_KEY to imageUri
+                )
             )
         }
     }

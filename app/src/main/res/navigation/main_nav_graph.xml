@@ -39,6 +39,9 @@
         <argument
             android:name="imageName"
             app:argType="string" />
+        <argument
+            android:name="uri"
+            app:argType="android.net.Uri" />
     </fragment>
     <dialog
         android:id="@+id/renameFragment"
