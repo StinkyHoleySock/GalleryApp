@@ -28,15 +28,15 @@ class RenameFragment: DialogFragment(R.layout.fragment_rename) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Получение аргументов изображения
         val imageName = arguments?.getString(NAME_KEY)
         val uri = arguments?.getParcelable<Uri>(URI_KEY)
 
         binding.etName.hint = imageName
 
         binding.tvApply.setOnClickListener {
-
-            // TODO: function to rename 
-            val newName = binding.etName.text.toString()
+            // val newName = binding.etName.text.toString()
+            // TODO: function to rename image
 
         }
 

@@ -9,12 +9,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dmitry.galleryapp.GalleryDataSource
+import com.dmitry.galleryapp.model.AlbumDataSource
 import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentMainBinding
-import com.dmitry.galleryapp.repository.GalleryRepository
+import com.dmitry.galleryapp.repository.AlbumRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 
 private var _binding: FragmentMainBinding? = null
 private val binding get() = _binding!!
@@ -27,8 +26,8 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         savedInstanceState: Bundle?
     ): View {
 
+        //Инициализация байндинга
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -37,8 +36,8 @@ class MainFragment: Fragment(R.layout.fragment_main) {
 
         binding.rvAlbums.visibility = View.INVISIBLE
 
-        val galleryRepository = GalleryRepository(
-            GalleryDataSource(requireActivity().application.contentResolver), Dispatchers.IO
+        val galleryRepository = AlbumRepository(
+            AlbumDataSource(requireActivity().application.contentResolver), Dispatchers.IO
         )
         val viewModel = MainViewModel(requireActivity().application, galleryRepository)
         val layoutManager = LinearLayoutManager(context)
@@ -66,7 +65,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
 
     }
-
+    //Зануляем байндинг во избежание утечек памяти
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

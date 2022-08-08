@@ -33,6 +33,7 @@ class AlbumAdapter(
             tvAlbumName.text = album.name
             tvNumberPhotos.text = album.count.toString()
 
+            //Навигация и передача аргументов
             this.albumItem.setOnClickListener {
                 albumItem.findNavController().navigate(
                     R.id.action_mainFragment_to_albumFragment,

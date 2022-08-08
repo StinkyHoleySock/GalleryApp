@@ -24,14 +24,15 @@ class ImageFragment: Fragment(R.layout.fragment_image) {
         savedInstanceState: Bundle?
     ): View {
 
+        //Инициализация байндинга
         _binding = FragmentImageBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Получение аргументов
         val imageName = arguments?.getString(NAME_KEY)
         val imageUri = arguments?.getParcelable<Uri?>(IMAGE_KEY)
 
@@ -45,8 +46,8 @@ class ImageFragment: Fragment(R.layout.fragment_image) {
             tvImageName.text = imageName
         }
 
+        //Навигация и передача аргументов
         binding.btnRename.setOnClickListener {
-
             findNavController().navigate(
                 R.id.action_imageFragment_to_renameFragment,
                 bundleOf(

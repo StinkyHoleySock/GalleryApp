@@ -33,6 +33,7 @@ class ImageAdapter(
 
             tvImageName.text = image.name
 
+            //Навигация и передача аргументов
             this.imageItem.setOnClickListener {
                 imageItem.findNavController().navigate(
                     R.id.action_albumFragment_to_imageFragment,
