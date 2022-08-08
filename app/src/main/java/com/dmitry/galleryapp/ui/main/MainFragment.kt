@@ -9,15 +9,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dmitry.galleryapp.Gallery
+import com.dmitry.galleryapp.GalleryDataSource
 import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentMainBinding
-import com.dmitry.galleryapp.model.Album
+import com.dmitry.galleryapp.repository.GalleryRepository
+import kotlinx.coroutines.Dispatchers
 
 private var _binding: FragmentMainBinding? = null
 private val binding get() = _binding!!
-
-private lateinit var adapter: AlbumAdapter
 
 class MainFragment: Fragment(R.layout.fragment_main) {
 
@@ -35,8 +34,11 @@ class MainFragment: Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gallery = Gallery(requireContext())
-        val albums: List<Album> = gallery.findAlbums()
+        val galleryRepository = GalleryRepository(
+            GalleryDataSource(requireActivity().application.contentResolver), Dispatchers.IO
+        )
+        val viewModel = MainViewModel(requireActivity().application, galleryRepository)
+        val layoutManager = LinearLayoutManager(context)
 
         //Получение пермишена на чтение из файловой системы
         val permissionLauncher = registerForActivityResult(
@@ -44,14 +46,11 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         ) { isGranted ->
             if (isGranted) {
 
-                adapter = AlbumAdapter(albums)
-
-                val layoutManager = LinearLayoutManager(context)
-
-                with(binding) {
-                    rvAlbums.layoutManager = layoutManager
-                    rvAlbums.adapter = adapter
+                viewModel.albums.observe(viewLifecycleOwner) {
+                    binding.rvAlbums.adapter = AlbumAdapter(it)
                 }
+
+                binding.rvAlbums.layoutManager = layoutManager
 
             } else {
                 Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
@@ -62,12 +61,10 @@ class MainFragment: Fragment(R.layout.fragment_main) {
 
     }
 
-    //Зануляем байндинг во избежание утечек памяти
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-
 
 

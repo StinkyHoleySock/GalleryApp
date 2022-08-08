@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dmitry.galleryapp.Gallery
+import com.dmitry.galleryapp.GalleryDataSource
 import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentAlbumBinding
-import com.dmitry.galleryapp.model.Image
+import com.dmitry.galleryapp.repository.GalleryRepository
+import kotlinx.coroutines.Dispatchers
 
 private var _binding: FragmentAlbumBinding? = null
 private val binding get() = _binding!!
-
-private lateinit var adapter: ImageAdapter
 
 class AlbumFragment: Fragment(R.layout.fragment_album) {
 
@@ -32,18 +31,20 @@ class AlbumFragment: Fragment(R.layout.fragment_album) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gallery = Gallery(requireContext())
         val albumId = arguments?.getString(ALBUM_KEY)
-        val images: List<Image> = gallery.findImagesInAlbum(albumId.toString())
+        val galleryRepository = GalleryRepository(
+            GalleryDataSource(requireActivity().application.contentResolver), Dispatchers.IO
+        )
+
+        val viewModel = AlbumViewModel(albumId, requireActivity().application, galleryRepository)
+
         val layoutManager = GridLayoutManager(context, 3)
-        adapter = ImageAdapter(images)
 
-
-
-        with(binding) {
-            rvPhotos.layoutManager = layoutManager
-            rvPhotos.adapter = adapter
+        viewModel.images.observe(viewLifecycleOwner) {
+            binding.rvImages.adapter = ImageAdapter(it)
         }
+
+        binding.rvImages.layoutManager = layoutManager
     }
 
 

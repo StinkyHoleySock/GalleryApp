@@ -1,22 +1,13 @@
 package com.dmitry.galleryapp
 
+import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
-import android.net.Uri
 import android.os.Build
-import android.os.storage.StorageManager
-import android.provider.DocumentsContract
 import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat.getSystemService
 import com.dmitry.galleryapp.model.Album
 import com.dmitry.galleryapp.model.Image
 
-class Gallery(private val context: Context) {
-    private val contentResolver by lazy {
-        context.contentResolver
-    }
+class GalleryDataSource(private val contentResolver: ContentResolver) {
 
     fun findAlbums(): List<Album> {
 
@@ -125,7 +116,5 @@ class Gallery(private val context: Context) {
         return findImages.values.toList().sortedByDescending { it.name }
     }
 
-    fun renameFile(uri: Uri, newName: String) {
-        //DocumentsContract.renameDocument(contentResolver, uri, newName)
-    }
 }
+

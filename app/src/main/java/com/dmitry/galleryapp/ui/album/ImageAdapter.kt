@@ -33,7 +33,7 @@ class ImageAdapter(
 
             tvImageName.text = image.name
 
-            this.imageItem.setOnClickListener() {
+            this.imageItem.setOnClickListener {
                 imageItem.findNavController().navigate(
                     R.id.action_albumFragment_to_imageFragment,
                     bundleOf(

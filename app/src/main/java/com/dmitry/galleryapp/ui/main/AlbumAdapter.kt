@@ -15,8 +15,6 @@ class AlbumAdapter(
     private val listArray: List<Album>,
 ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = AlbumItemBinding.inflate(inflater, parent, false)
@@ -35,7 +33,7 @@ class AlbumAdapter(
             tvAlbumName.text = album.name
             tvNumberPhotos.text = album.count.toString()
 
-            this.albumItem.setOnClickListener() {
+            this.albumItem.setOnClickListener {
                 albumItem.findNavController().navigate(
                     R.id.action_mainFragment_to_albumFragment,
                     bundleOf(AlbumFragment.ALBUM_KEY to album.id)
