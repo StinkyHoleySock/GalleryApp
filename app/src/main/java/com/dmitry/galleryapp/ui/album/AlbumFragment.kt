@@ -37,14 +37,19 @@ class AlbumFragment: Fragment(R.layout.fragment_album) {
         )
 
         val viewModel = AlbumViewModel(albumId, requireActivity().application, galleryRepository)
-
         val layoutManager = GridLayoutManager(context, 3)
 
-        viewModel.images.observe(viewLifecycleOwner) {
-            binding.rvImages.adapter = ImageAdapter(it)
+        with(binding) {
+
+            rvImages.layoutManager = layoutManager
+            viewModel.images.observe(viewLifecycleOwner) {
+                rvImages.adapter = ImageAdapter(it)
+            }
+
+            progressCircular.visibility = View.GONE
+            rvImages.visibility = View.VISIBLE
         }
 
-        binding.rvImages.layoutManager = layoutManager
     }
 
 

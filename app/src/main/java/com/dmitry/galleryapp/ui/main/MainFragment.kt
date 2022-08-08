@@ -14,6 +14,7 @@ import com.dmitry.galleryapp.R
 import com.dmitry.galleryapp.databinding.FragmentMainBinding
 import com.dmitry.galleryapp.repository.GalleryRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 
 private var _binding: FragmentMainBinding? = null
 private val binding get() = _binding!!
@@ -34,6 +35,8 @@ class MainFragment: Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvAlbums.visibility = View.INVISIBLE
+
         val galleryRepository = GalleryRepository(
             GalleryDataSource(requireActivity().application.contentResolver), Dispatchers.IO
         )
@@ -45,12 +48,15 @@ class MainFragment: Fragment(R.layout.fragment_main) {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
+                with(binding) {
+                    viewModel.albums.observe(viewLifecycleOwner) {
+                        rvAlbums.adapter = AlbumAdapter(it)
+                    }
+                    rvAlbums.layoutManager = layoutManager
 
-                viewModel.albums.observe(viewLifecycleOwner) {
-                    binding.rvAlbums.adapter = AlbumAdapter(it)
+                    progressCircular.visibility = View.GONE
+                    rvAlbums.visibility = View.VISIBLE
                 }
-
-                binding.rvAlbums.layoutManager = layoutManager
 
             } else {
                 Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
